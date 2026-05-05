@@ -4,6 +4,7 @@ import { MariaDBAdapter } from "./database/mariadb";
 import { PostgresAdapter } from "./database/postgres";
 import { MongoDBAdapter } from "./database/mongodb";
 import { SQLiteAdapter } from "./database/sqlite";
+import { InfluxDBAdapter } from "./database/influxdb";
 import { MSSQLAdapter } from "./database/mssql";
 import { RedisAdapter } from "./database/redis";
 import { LocalFileSystemAdapter } from "./storage/local";
@@ -46,6 +47,7 @@ export function registerAdapters() {
     registry.register(SQLiteAdapter);
     registry.register(MSSQLAdapter);
     registry.register(RedisAdapter);
+    registry.register(InfluxDBAdapter);
 
     registry.register(LocalFileSystemAdapter);
     registry.register(S3GenericAdapter);

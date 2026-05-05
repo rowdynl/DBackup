@@ -21,6 +21,7 @@ const CLI_REQUIREMENTS: Record<string, string> = {
     mongodb: 'mongodump',
     mssql: 'sqlcmd',
     redis: 'redis-cli',
+    influxdb: 'influx',
 };
 
 // Check which CLI tools are missing
@@ -179,6 +180,30 @@ export const testDatabases = [
             port: 63798,
             password: 'testpassword',
             database: 0
+        }
+    },
+    // --- InfluxDB ---
+    {
+        name: 'Test InfluxDB 1.8',
+        config: {
+            type: 'influxdb',
+            version: '1',
+            host: TEST_HOST,
+            port: 18186,
+            rpcPort: 18188,
+            database: 'testdb'
+        }
+    },
+    {
+        name: 'Test InfluxDB 2.7',
+        config: {
+            type: 'influxdb',
+            version: '2',
+            host: TEST_HOST,
+            port: 28286,
+            token: 'testtoken',
+            organization: 'testorg',
+            bucket: 'testbucket'
         }
     }
 ];

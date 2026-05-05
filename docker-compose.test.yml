@@ -384,3 +384,46 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  # ==========================================
+  # InfluxDB Family
+  # ==========================================
+
+  # InfluxDB 1.8 (Last v1 release)
+  # Exposes both HTTP (8086) and RPC backup port (8088)
+  influxdb-1:
+    image: influxdb:1.8
+    container_name: dbm-test-influxdb-1
+    environment:
+      INFLUXDB_DB: testdb
+      INFLUXDB_HTTP_AUTH_ENABLED: "false"
+      INFLUXDB_REPORTING_DISABLED: "true"
+    ports:
+      - "18186:8086"
+      - "18188:8088"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # InfluxDB 2.7 (Current v2 stable)
+  influxdb-2:
+    image: influxdb:2.7
+    container_name: dbm-test-influxdb-2
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: testuser
+      DOCKER_INFLUXDB_INIT_PASSWORD: testpassword
+      DOCKER_INFLUXDB_INIT_ORG: testorg
+      DOCKER_INFLUXDB_INIT_BUCKET: testbucket
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: testtoken
+      INFLUXD_REPORTING_DISABLED: "true"
+    ports:
+      - "28286:8086"
+    healthcheck:
+      test: ["CMD", "influx", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s

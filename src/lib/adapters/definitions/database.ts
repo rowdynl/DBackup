@@ -98,6 +98,35 @@ export const RedisSchema = z.object({
     ...sshFields,
 });
 
+export const InfluxDBSchema = z.object({
+    version: z.enum(["1", "2"]).default("2").describe("InfluxDB major version"),
+    host: z.string().default("localhost"),
+    port: z.coerce.number().default(8086).describe("HTTP API port"),
+    ssl: z.boolean().default(false).describe("Use HTTPS"),
+
+    // InfluxDB v1 fields
+    username: z.string().optional().describe("Username (v1 only)"),
+    password: z.string().optional().describe("Password (v1 only)"),
+    database: z
+        .union([z.string(), z.array(z.string())])
+        .default("")
+        .describe("Database(s) to backup (v1 only, leave empty to backup all)"),
+    rpcPort: z.coerce
+        .number()
+        .default(8088)
+        .describe("RPC service port used by influxd backup/restore (v1 only, default: 8088)"),
+
+    // InfluxDB v2 fields
+    token: z.string().optional().describe("API token (v2 only)"),
+    organization: z.string().optional().describe("Organization name (v2 only)"),
+    bucket: z
+        .union([z.string(), z.array(z.string())])
+        .default("")
+        .describe("Bucket(s) to backup (v2 only, leave empty to backup all)"),
+
+    options: z.string().optional().describe("Additional CLI options"),
+});
+
 // Inferred TypeScript Types
 export type MySQLConfig = z.infer<typeof MySQLSchema>;
 export type MariaDBConfig = z.infer<typeof MariaDBSchema>;
@@ -106,8 +135,9 @@ export type MongoDBConfig = z.infer<typeof MongoDBSchema>;
 export type SQLiteConfig = z.infer<typeof SQLiteSchema>;
 export type MSSQLConfig = z.infer<typeof MSSQLSchema>;
 export type RedisConfig = z.infer<typeof RedisSchema>;
+export type InfluxDBConfig = z.infer<typeof InfluxDBSchema>;
 
-export type DatabaseConfig = MySQLConfig | MariaDBConfig | PostgresConfig | MongoDBConfig | SQLiteConfig | MSSQLConfig | RedisConfig;
+export type DatabaseConfig = MySQLConfig | MariaDBConfig | PostgresConfig | MongoDBConfig | SQLiteConfig | MSSQLConfig | RedisConfig | InfluxDBConfig;
 
 // Generic type alias for dialect base class (accepts any database config)
 export type AnyDatabaseConfig = DatabaseConfig;

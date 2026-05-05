@@ -35,6 +35,25 @@ RUN corepack enable && corepack prepare pnpm@10.29.3 --activate && \
 RUN pg_dump --version | grep -q 'PostgreSQL) 18\.' || \
     (echo "ERROR: pg_dump version validation failed! Check PostgreSQL 18 client package." && exit 1)
 
+# Install InfluxDB CLI tools for backup/restore support
+# influxd -> v1 backup/restore (influxd backup/restore -portable)
+# influx  -> v2 backup/restore (influx backup/restore)
+# gcompat provides the glibc compatibility layer for these pre-built binaries on Alpine/musl
+ARG TARGETARCH
+RUN apk add --no-cache gcompat && \
+    ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "amd64") && \
+    curl -fsSL "https://dl.influxdata.com/influxdb/releases/influxdb-1.8.10_linux_${ARCH}.tar.gz" \
+        -o /tmp/influxdb1.tar.gz && \
+    mkdir -p /tmp/influxdb1 && \
+    tar -xzf /tmp/influxdb1.tar.gz -C /tmp/influxdb1/ && \
+    find /tmp/influxdb1/ -name influxd -type f -exec install -m 755 {} /usr/local/bin/influxd \; && \
+    curl -fsSL "https://dl.influxdata.com/influxdb/releases/influxdb2-client-2.7.5-linux-${ARCH}.tar.gz" \
+        -o /tmp/influxdb2cli.tar.gz && \
+    mkdir -p /tmp/influxdb2cli && \
+    tar -xzf /tmp/influxdb2cli.tar.gz -C /tmp/influxdb2cli/ && \
+    find /tmp/influxdb2cli/ -name influx -type f -exec install -m 755 {} /usr/local/bin/influx \; && \
+    rm -rf /tmp/influxdb1.tar.gz /tmp/influxdb1 /tmp/influxdb2cli.tar.gz /tmp/influxdb2cli
+
 # 1. Install Dependencies
 FROM base AS deps
 WORKDIR /app

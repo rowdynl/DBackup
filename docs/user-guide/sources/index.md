@@ -13,6 +13,7 @@ DBackup supports a wide variety of database engines.
 | [Redis](/user-guide/sources/redis) | 6.x, 7.x, 8.x | `redis-cli --rdb` |
 | [SQLite](/user-guide/sources/sqlite) | 3.x | `.dump` command |
 | [MSSQL](/user-guide/sources/mssql) | 2017, 2019, 2022 | `BACKUP DATABASE` |
+| [InfluxDB](/user-guide/sources/influxdb) | 1.x, 2.x | `influxd backup` / `influx backup` |
 
 ## Adding a Source
 

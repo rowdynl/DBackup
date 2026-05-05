@@ -2,6 +2,13 @@
 
 All notable changes to DBackup are documented here.
 
+## v2.1.0
+*Release: In Progress*
+
+### ✨ Features
+
+- **influxdb**: Added InfluxDB adapter supporting both v1 (`influxd backup`) and v2 (`influx backup`) with full backup/restore pipeline, per-database and per-bucket selection, TAR archive format with embedded metadata, and HTTP-based connection testing. Bundled `influxd` (1.8.10) and `influx` CLI (2.7.5) into the Docker image.
+
 ## v2.0.1 - SSH Connection Fix with new Credential Profiles
 *Released: May 3, 2026*
 
